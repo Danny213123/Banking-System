@@ -4,52 +4,46 @@ import java.io.Serializable;
 
 public class Report implements Serializable
 {
-    String firstName;
-    String lastName;
-    String email;
-    int cardNum;
+    CA customer;
+    AD admin;
+    String description;
 
-    public Report(String firstName, String lastName, String email, int cardNum)
+    /*
+     * Another Constructor for Report
+     * @param customer: customer that made the report
+     * @param admin: admin that receives the report
+     */
+    public Report(CA customer, AD admin, String description)
     {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.cardNum = cardNum;
-    }
-
-    //Getter and setter for firstName
-    public String getFirstName()
-    {
-        return firstName;
-    }
-    public void setFirstName(String fName)
-    {
-        this.firstName = fName;
+        this.customer = customer;
+        this.admin = admin;
+        this.description = description;
     }
 
-    //Getter and setter for lastName
-    public String getLastName()
+    public void setCustomer(CA customer)
     {
-        return lastName;
+        this.customer = customer;
     }
-    public void setLastName(String lName)
+    public CA getCustomer()
     {
-        this.lastName = lName;
-    }
-
-    //Getter and setter for email
-    public String getEmail()
-    {
-        return email;
-    }
-    public void setEmail(String email)
-    {
-        this.email = email;
+        return customer;
     }
 
-    //Getter for cardNum
-    public int getCardNum()
+    public void setAdmin(AD admin)
     {
-        return cardNum;
+        this.admin = admin;
+    }
+    public AD getAdmin()
+    {
+        return admin;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+    public String getDescription()
+    {
+        return description;
     }
 }

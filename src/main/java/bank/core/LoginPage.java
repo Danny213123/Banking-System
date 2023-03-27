@@ -22,7 +22,6 @@ public class LoginPage extends JFrame implements ActionListener
     private final JCheckBox showPassword;
 
     BankAutomated logic;
-
     CA customer;
 
     public LoginPage(BankAutomated BA)
@@ -171,6 +170,7 @@ public class LoginPage extends JFrame implements ActionListener
         {
             emailField.setText("");
             passwordField.setText("");
+            showPassword.setSelected(false);
         }
         else if (e.getSource() == loginButton)
         {
@@ -183,6 +183,7 @@ public class LoginPage extends JFrame implements ActionListener
                 JOptionPane.showMessageDialog(this, "Email/Password cannot be blank.");
                 emailField.setText("");
                 passwordField.setText("");
+                showPassword.setSelected(false);
                 return;
             }
 
@@ -193,19 +194,21 @@ public class LoginPage extends JFrame implements ActionListener
                         "account.\nSelect Register to create an account with us.");
                 emailField.setText("");
                 passwordField.setText("");
+                showPassword.setSelected(false);
                 return;
             }
 
             customer = logic.loginAccount(email, password);
-
+            
             // Do other thing
             if (customer != null)
             {
                 // Debug System.out.println("Success");
                 //Show homepage for the customer
-                HomePage home = new HomePage(logic, customer);
+                HomePage home = new HomePage(this, logic, customer);
                 emailField.setText("");
                 passwordField.setText("");
+                showPassword.setSelected(false);
                 this.setVisible(false);
                 home.setVisible(true);
             }
@@ -215,6 +218,7 @@ public class LoginPage extends JFrame implements ActionListener
                 JOptionPane.showMessageDialog(this, "Email/Password invalid. Try again.");
                 emailField.setText("");
                 passwordField.setText("");
+                showPassword.setSelected(false);
             }
         }
         else if (e.getSource() == registerButton)
@@ -222,6 +226,7 @@ public class LoginPage extends JFrame implements ActionListener
             RegisterPage register = new RegisterPage(logic, this);
             emailField.setText("");
             passwordField.setText("");
+            showPassword.setSelected(false);
             this.setVisible(false);
             register.setVisible(true);
         }
@@ -229,6 +234,7 @@ public class LoginPage extends JFrame implements ActionListener
         {
             emailField.setText("");
             passwordField.setText("");
+            showPassword.setSelected(false);
             ForgotPage forgot = new ForgotPage(logic, this);
             this.setVisible(false);
             forgot.setVisible(true);
