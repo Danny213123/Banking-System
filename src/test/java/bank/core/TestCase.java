@@ -1,18 +1,80 @@
 package bank.core;
 
 import org.junit.Test;
-
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
-
 import static org.junit.Assert.*;
 
-
-// This class is for the test cases
+// Test cases for each of the functions used, including the BankAutomated functions and setters and getters.
 public class TestCase {
     CA dummy;
 
+    /* Test 0
+     * Test case for saving and loading from file
+     * 
+     */
+    @Test
+    public void saveloadTest(){
+        BankAutomated BA = new BankAutomated(false);
+
+        BA.createAccountTest("test", "dummy", "416-792-1234", "test street",
+                            "Male", "01/01/1990", "test@gmail.com", "Hello@World1", "01/01/2027", "555");
+
+        // Save to file
+        BA.logout();
+
+        // Load from file
+        BA = new BankAutomated();
+
+        // Test 1
+        // Check if the account is loaded correctly, correct amount is 0
+        assertEquals(BA.customerAccounts.size(), 1);
+
+        // Test 2
+        // Check if the account is loaded correctly, correct amount is 0
+        assertNotEquals(BA.customerAccounts.size(), 2);
+
+        BankAutomated BA_test_two = new BankAutomated(false);
+
+        int batchSize = 1000;
+
+        // Split the workload into 1000 threads, race condition handled by hash map inside createAccount
+        IntStream.range(0, 1000)
+
+            // Each thread work simultaneously
+            .parallel()
+
+            // Each thread do:
+            .forEach(batch -> {
+
+                // start and end for each batch
+                int start = batch * batchSize;
+                int end = start + batchSize;
+
+                // Do work:
+                for (int i = start; i < end; i++) {
+                    String email = i + "@gmail.com";
+                    BA_test_two.createAccountTest("test", "dummy", "416-792-1234", "test street",
+                            "Male", "01/01/1990", email, "Hello@World1", "01/01/2027", "555");
+                }
+
+            });
+
+        // Save to file
+        BA_test_two.logout();
+
+        // Load from file
+        BA = new BankAutomated();
+
+        // Test 3
+        // Check if the account is loaded correctly, correct amount is 0
+        assertEquals(BA.customerAccounts.size(), 1_000_000);
+
+        JOptionPane.showMessageDialog(null, "Test cases passed", "Save/Load test", JOptionPane.INFORMATION_MESSAGE);
+
+    }
+    
     /* Test 1
      * Stress test for createAccount and login
      */
@@ -46,7 +108,7 @@ public class TestCase {
                 }
 
             });
-
+        
         long endTime = System.currentTimeMillis();
         double timePassedSeconds = (endTime - startTime);
 
@@ -182,7 +244,7 @@ public class TestCase {
 
         // Check if the transaction amount is correct
         assertEquals(amount, 5000);
-
+        
         // Check if the transaction was added to the history
         assertEquals(cust.getChequingHist().size(), 1);
 
@@ -257,7 +319,7 @@ public class TestCase {
 
         // Create a customer
         CA john = BA.createAccountTest("John", "Doe", "647-987-6543", "321 Example St.", "Male",
-                "01/01/2000", "johndoe@example.com", "Password123@", 
+                "01/01/2000", "johndoe@example.com", "Password123@",
                 "01/01/2030", "123");
 
 
@@ -433,13 +495,13 @@ public class TestCase {
 
         // Test 1
         // Check if the card expiry is valid
-        assertEquals(BA.validCardExpiry(dummy.getCardExpiry()), true);
+        assertTrue(BA.validCardExpiry(dummy.getCardExpiry()));
 
         dummy.setCardExpiry("01/12/2021");
 
         // Test 2
         // Check if the card expiry is invalid
-        assert(BA.validCardExpiry(dummy.getCardExpiry()) == false);
+        assert(!BA.validCardExpiry(dummy.getCardExpiry()));
 
         JOptionPane.showMessageDialog(null, "Test cases passed", "testCardExpiry", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -471,11 +533,11 @@ public class TestCase {
 
         // Test 3
         // Check if the bank number is valid
-        assertEquals(BA.validBankNumber("12345"), true);
+        assertTrue(BA.validBankNumber("12345"));
 
         // Test 4
         // Check if the bank number is invalid
-        assertEquals(BA.validBankNumber("123456"), false);
+        assertFalse(BA.validBankNumber("123456"));
 
         JOptionPane.showMessageDialog(null, "Test cases passed", "testBankNumber", JOptionPane.INFORMATION_MESSAGE);
 
@@ -506,11 +568,11 @@ public class TestCase {
 
         // Test 3
         // Check if the CVV is invalid
-        assertEquals(BA.validCVV("123456"), false);
+        assertFalse(BA.validCVV("123456"));
 
         // Test 4
         // Check if the CVV is valid
-        assertEquals(BA.validCVV("126"), true);
+        assertTrue(BA.validCVV("126"));
 
         JOptionPane.showMessageDialog(null, "Test cases passed", "testCVV", JOptionPane.INFORMATION_MESSAGE);
 
@@ -541,11 +603,11 @@ public class TestCase {
 
         // Test 3
         // Check if the password is valid
-        assertEquals(BA.validPassword("Hello123!@#"), true);
+        assertTrue(BA.validPassword("Hello123!@#"));
 
         // Test 4
         // Check if the password is invalid
-        assertEquals(BA.validPassword("hello123!@#"), false);
+        assertFalse(BA.validPassword("hello123!@#"));
 
         JOptionPane.showMessageDialog(null, "Test cases passed", "testPassword", JOptionPane.INFORMATION_MESSAGE);
 
@@ -576,11 +638,11 @@ public class TestCase {
 
         // Test 3
         // Check if the DoB is invalid
-        assertEquals(BA.validDOB("09","01","2003"), true);
+        assertTrue(BA.validDOB("09", "01", "2003"));
 
         // Test 4
         // Check if the DoB is valid
-        assertEquals(BA.validDOB("09","01","2013"), false);
+        assertFalse(BA.validDOB("09", "01", "2013"));
 
         JOptionPane.showMessageDialog(null, "Test cases passed", "testDOB", JOptionPane.INFORMATION_MESSAGE);
 
@@ -667,11 +729,11 @@ public class TestCase {
 
         // Test 3
         // Check if the card number is valid
-        assertEquals(BA.validCard("4417123456789113"), true);
+        assertTrue(BA.validCard("4417123456789113"));
 
         // Test 4
         // Check if the card number is invalid
-        assertEquals(BA.validCard("552823455789113"), false);
+        assertFalse(BA.validCard("552823455789113"));
 
         JOptionPane.showMessageDialog(null, "Test cases passed", "testCardNum", JOptionPane.INFORMATION_MESSAGE);
 
@@ -838,9 +900,9 @@ public class TestCase {
                 "Male", "01/01/1990", "test@gmail.com", "Hello@World1",
                 "4417123456789113", "01/01/2027", "555");
 
-        dummy.chequing=500;
+        dummy.setChequing(500);
         dummy.setSavings(1000);
-        dummy.bankNumber = "12345";
+        dummy.setBankNumber("12345");
 
         // Test getters for constructor attributes
         assertEquals("John", dummy.getFirstName());
@@ -932,6 +994,13 @@ public class TestCase {
 
         // Test setter and getters for reports
         Report reportTest = new Report(dummy, admin, "test");
+        assertEquals(reportTest.getAdmin(), admin);
+        
+        AD a = new AD("Mojo", "Jojo", "abc@tmu.ca", "6471112222", 0);
+        
+        reportTest.setAdmin(a);
+        assertEquals(reportTest.getAdmin(), a);
+        
 
         assertEquals("Jane", reportTest.getCustomer().getFirstName());
         assertEquals("Smith", reportTest.getCustomer().getLastName());

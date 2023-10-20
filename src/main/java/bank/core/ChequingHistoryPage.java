@@ -8,6 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
+/**
+ * This class is the graphical implementation of the customer's chequing account transaction history
+ * It displays the last 6 transactions the customer did with their chequing account.
+ */
 public class ChequingHistoryPage extends JFrame implements ActionListener
 {
     static final int WIDTH = 1920;
@@ -15,55 +19,46 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
     BankAutomated BA;
     HomePage home;
     CA customer;
-
-    /*
-     * ChequingHistoryPage Constructor
-     * @param home HomePage object
-     * @param BA BankAutomated object
-     * @param customer CA object
-     * 
-     */
     private final JButton backToHome;
+    
+     /**
+     * ChequingHistoryPage Constructor. This constructor creates all the frame specifications for when the customer
+     * clicks on their chequing account (i.e., buttons, display setup, etc.). It retrieves the customer's latest
+     * 6 chequing transaction and formats and displays them.
+     * @param home HomePage object to return to when the user wants to
+     * @param BA BankAutomated object to process the logout if the user exits the system
+     * @param customer CA object, the customer that is logged in
+     */
     public ChequingHistoryPage(HomePage home, BankAutomated BA, CA customer)
     {
-
-        // Set up the frame
         this.setTitle("Chequing History");
         this.setLayout(null);
         this.home = home;
-        this.customer = customer;
         this.BA = BA;
+        this.customer = customer;
 
-        // Set up the background
         Font labels = new Font("Raleway", Font.PLAIN, 22);
         Border emptyBorder = BorderFactory.createEmptyBorder();
         Border border = BorderFactory.createLineBorder(Color.black, 2);
         Color bg = new Color(214, 215, 215);
 
-        // Set up the background
         ArrayList<JTextArea> blocks = new ArrayList<>();
         blocks.add(new JTextArea()); blocks.add(new JTextArea()); blocks.add(new JTextArea());
         blocks.add(new JTextArea()); blocks.add(new JTextArea()); blocks.add(new JTextArea());
 
-        // Go through the transaction history and display the transactions (chequing)
         int i = 0;
         if (customer.getSavingsHist().size() != 0)
         {
             for (Transaction transaction : customer.getChequingHist())
             {
-
-                // If the transaction is a deposit or withdrawal (E-Transfer)
                 if (transaction.getSender().equals(customer.getEmail()) && transaction.getAccountFrom().equals("Chequing"))
                 {
-
-                    // Set up the transaction block
                     String type = "E-Transfer";
                     String id = String.valueOf(transaction.getId());
                     String receiverEmail = transaction.getReceiver();
                     String amount = "$ -" + transaction.getAmount();
                     String remaining = "$ " + Math.round(transaction.getSenderRemaining()*100.0)/100.0;
 
-                    // Write to transaction block
                     JTextArea trans = blocks.get(i);
                     trans.setText("  Transaction ID: " + id + "\n  Receiver (Email): " + receiverEmail +
                             "\n  Amount: " + amount + "\n  Remaining Balance: " + remaining + "\n  Type: " + type);
@@ -71,8 +66,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     trans.setBorder(border);
                     trans.setEditable(false);
                     trans.setFont(labels);
-
-                    // Set the bounds of the transaction block
                     if (i == 0)
                     {
                         trans.setBounds(35, 150, 600, 150);
@@ -99,19 +92,14 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     }
                     this.add(trans);
                 }
-
-                // If the transaction is a transfer from account (Bank Transfer)
                 else if (transaction.getSender().equals(customer.getFirstName() + " " + customer.getLastName()) && transaction.getAccountFrom().equals("Chequing"))
                 {
-
-                    // Set up the transaction block
                     String type = "Bank Transfer";
                     String id = String.valueOf(transaction.getId());
                     String receiverAcc = transaction.getReceiver();
                     String amount = "$ -" + transaction.getAmount();
                     String remaining = "$ " + Math.round(transaction.getSenderRemaining()*100.0)/100.0;
 
-                    // Write to transaction block
                     JTextArea trans = blocks.get(i);
                     trans.setText("  Transaction ID: " + id + "\n  Receiver (Acc#): " + receiverAcc +
                             "\n  Amount: " + amount + "\n  Remaining Balance: " + remaining +  "\n  Type: " + type);
@@ -119,8 +107,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     trans.setBorder(border);
                     trans.setEditable(false);
                     trans.setFont(labels);
-
-                    // Set the bounds of the transaction block
                     if (i == 0)
                     {
                         trans.setBounds(35, 150, 600, 150);
@@ -147,19 +133,14 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     }
                     this.add(trans);
                 }
-
-                // Customer recieved from chequing (Fund Transfer)
                 else if (transaction.getSender().equals("Chequing"))
                 {
-
-                    // Set up the transaction block
                     String type = "Fund Transfer";
                     String id = String.valueOf(transaction.getId());
                     String fromTo = "Chequing to Savings";
                     String amount = "$ -" + transaction.getAmount();
                     String remaining = "$ " + Math.round(transaction.getSenderRemaining() * 100.0)/100.0;
 
-                    // Write to transaction block
                     JTextArea trans = blocks.get(i);
                     trans.setText("  Transaction ID: " + id + "\n  From, To: " + fromTo +
                             "\n  Amount: " + amount + "\n  Remaining Balance: " + remaining + "\n  Type: " + type);
@@ -167,8 +148,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     trans.setBorder(border);
                     trans.setEditable(false);
                     trans.setFont(labels);
-
-                    // Set the bounds of the transaction block
                     if (i == 0)
                     {
                         trans.setBounds(35, 150, 600, 150);
@@ -195,18 +174,14 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     }
                     this.add(trans);
                 }
-
-                // Customer recieved from savings (Fund Transfer)
                 else if (transaction.getSender().equals("Savings"))
                 {
-                    // Set up the transaction block
                     String type = "Fund Transfer";
                     String id = String.valueOf(transaction.getId());
                     String fromTo = "Savings to Chequing";
                     String amount = "$  " + transaction.getAmount();
                     String remaining = "$ " + Math.round(transaction.getReceiverRemaining()*100.0)/100.0;
 
-                    // Write to transaction block
                     JTextArea trans = blocks.get(i);
                     trans.setText("  Transaction ID: " + id + "\n  From, To: " + fromTo +
                             "\n  Amount: " + amount + "\n  Remaining Balance: " + remaining + "\n  Type: " + type);
@@ -214,8 +189,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     trans.setBorder(border);
                     trans.setEditable(false);
                     trans.setFont(labels);
-
-                    // Set the bounds of the transaction block
                     if (i == 0)
                     {
                         trans.setBounds(35, 150, 600, 150);
@@ -242,19 +215,14 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     }
                     this.add(trans);
                 }
-
-                // Customer recieved from bank (Bank Transfer)
                 else if (transaction.getReceiver().equals(customer.getBankNumber()))
                 {
-
-                    // Set up the transaction block
                     String type = "Bank Transfer";
                     String id = String.valueOf(transaction.getId());
                     String senderName = transaction.getSender();
                     String amount = "$  " + transaction.getAmount();
                     String remaining = "$ " + Math.round(transaction.getReceiverRemaining()*100.0)/100.0;
 
-                    // Write to transaction block
                     JTextArea trans = blocks.get(i);
                     trans.setText("  Transaction ID: " + id + "\n  Sender's Name: " + senderName +
                             "\n  Amount: " + amount + "\n  Remaining Balance: " + remaining + "\n  Type: " + type);
@@ -263,7 +231,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     trans.setEditable(false);
                     trans.setFont(labels);
 
-                    // Set the bounds of the transaction block
                     if (i == 0)
                     {
                         trans.setBounds(35, 150, 600, 150);
@@ -290,18 +257,14 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     }
                     this.add(trans);
                 }
-
-                // Customer recieved from another customer (E-Transfer)
                 else if (transaction.getReceiver().equals(customer.getEmail()))
                 {
-                    // Set up the transaction block
                     String type = "E-Transfer";
                     String id = String.valueOf(transaction.getId());
                     String senderName = transaction.getSender();
                     String amount = "$  " + transaction.getAmount();
                     String remaining = "$ " + Math.round(transaction.getReceiverRemaining()*100.0)/100.0;
 
-                    // Write to transaction block
                     JTextArea trans = blocks.get(i);
                     trans.setText("  Transaction ID: " + id + "\n  Sender's Email: " + senderName +
                             "\n  Amount: " + amount + "\n  Remaining Balance: " + remaining +  "\n  Type: " + type);
@@ -310,7 +273,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                     trans.setEditable(false);
                     trans.setFont(labels);
 
-                    // Set the bounds of the transaction block
                     if (i == 0)
                     {
                         trans.setBounds(35, 150, 600, 150);
@@ -346,8 +308,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                 }
             }
         }
-
-        // If there are no transactions in history
         else
         {
             JLabel noHist = new JLabel("No Transaction History");
@@ -356,7 +316,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
             this.add(noHist);
         }
 
-        // Back to Home Button
         backToHome = new JButton("Back to Home");
         backToHome.setFont(new Font("SansSerif", Font.PLAIN, 22));
         backToHome.setBounds(450, 600, 350, 50);
@@ -370,7 +329,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
         backToHome.addActionListener(this);
         this.add(backToHome);
 
-        // Window listener to logout when window is closed
         this.addWindowListener(new WindowEventHandler() {
             @Override
             public void windowClosing(WindowEvent evt) {
@@ -386,8 +344,6 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
                 System.exit(0);
             }
         });
-
-        // Set the background color
         this.getContentPane().setBackground(bg);
         this.getRootPane().setDefaultButton(backToHome);
         this.setSize(WIDTH, LENGTH);
@@ -396,10 +352,9 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-    /*
-     * Paints the background of the panel
-     * @param g the graphics object
-     * 
+    /**
+     * paint method, overrides the JFrame paint method in order to allow for custom graphical design
+     * @param g Graphics object
      */
     public void paint(Graphics g)
     {
@@ -413,17 +368,16 @@ public class ChequingHistoryPage extends JFrame implements ActionListener
         g2.setPaint(redToBlack);
         g2.fillRect(0, 0, WIDTH+1, 150);
 
-        // Paint the title
         Font regFont = new Font("Raleway", Font.BOLD, 60);
         g2.setFont(regFont);
         g2.setColor(new Color(250, 185, 60));
         g2.drawString("Chequing Transaction History", 25, 110);
     }
 
-    /*
-     * Action listener for the back to home button
-     * @param e the action event
-     * 
+    /**
+     * actionPerformed method (implementing ActionListener). When the "Back To Home" button is clicked, it sends
+     * the customer back to their homepage.
+     * @param e ActionEvent object, which listens and keeps track of any button clicks
      */
     @Override
     public void actionPerformed(ActionEvent e)

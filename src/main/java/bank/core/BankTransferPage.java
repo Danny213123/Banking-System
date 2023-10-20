@@ -7,6 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
+/**
+ * This class is a graphical implementation of the Bank Transfer page where customers would be able to make
+ * bank transfers (either from chequing or savings) to any user if they have their account number. Currently, this class
+ * assumes that any 5-digit number is a valid bank account number. If a user with that account number exists within
+ * the system, then the money is automatically deposited to their chequing account. Otherwise, a prompt saying it is an
+ * external transfer is shown.
+ */
 public class BankTransferPage extends JFrame implements ActionListener
 {
     static final int WIDTH = 1920;
@@ -23,13 +30,13 @@ public class BankTransferPage extends JFrame implements ActionListener
     private final JComboBox<String> selectAccount;
     private final JButton completeButton;
 
-    /*
-     * BankTransferPage Constructor
+    /**
+     * This constructor creates all the frame specifications for when the customer selects "Transfer"
+     * and then "Bank Transfer" in the system (i.e., buttons, labels, etc.)
      * @param BA BankAutomated object
      * @param home HomePage object
      * @param customer CA object
      * @param login LoginPage object
-     * 
      */
     public BankTransferPage(BankAutomated BA, HomePage home, CA customer, LoginPage login)
     {
@@ -144,10 +151,9 @@ public class BankTransferPage extends JFrame implements ActionListener
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-    /*
-     * paint method
+    /**
+     * paint method, overrides the JFrame paint method in order to allow for custom graphical design
      * @param g Graphics object
-     * 
      */
     public void paint(Graphics g)
     {
@@ -168,10 +174,12 @@ public class BankTransferPage extends JFrame implements ActionListener
         g2.drawString("Make Bank Transfer", 25, 110);
     }
 
-    /*
-     * actionPerformed method (button listener)
-     * @param e ActionEvent object
-     * 
+    /**
+     * actionPerformed method (implementing ActionListener). It calls all the logic through BankAutomated
+     * when certain conditions are met through the ActionEvent parameter (e.g., a button is clicked). It also
+     * displays success/failure methods depending on the conditions, as well as controls the frame display (e.g.,
+     * if back to home is clicked, it displays the homepage frame and stops displaying the transfer one).
+     * @param e ActionEvent object, which listens and keeps track of any button clicks
      */
     @Override
     public void actionPerformed(ActionEvent e)
@@ -221,11 +229,14 @@ public class BankTransferPage extends JFrame implements ActionListener
             {
                 JOptionPane.showMessageDialog(this, "ERROR: Minimum transfer is $0.5");
             }
+            else if (result == 6)
+            {
+                JOptionPane.showMessageDialog(this, "ERROR: You cannot make a bank transfer to yourself. Try transfer funds instead.");
+            }
 
             // Transfer was successful (external transfer)
             else if (result == 3)
             {
-
                 // Print success message and send user back to home page
                 JOptionPane.showMessageDialog(this, "SUCCESS: You transferred $" + amount +
                         " to user with account number " + accountNum + ".\n This is an external transfer (i.e., user is not a part of BCS).");
@@ -234,7 +245,7 @@ public class BankTransferPage extends JFrame implements ActionListener
                 home.setVisible(true);
             }
 
-            // Transfer was succcessful (internal transfer)
+            // Transfer was successful (internal transfer)
             else if (result == 0)
             {
                 // Print success message and send user back to home page
@@ -252,8 +263,5 @@ public class BankTransferPage extends JFrame implements ActionListener
                 JOptionPane.showMessageDialog(this, "An error occurred.");
             }
         }
-
     }
-    
 }
-

@@ -7,13 +7,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-// This class is for the Requests page
+/**
+ * This class is the graphical implementation of the make Requests page. On this page, customers can select the type
+ * of request they want to make and then describe the details of the request. Depending on the request type, the request
+ * is sent to a different actor in the system (e.g., meeting request to admin, system changes to maintenance, etc.).
+ */
 public class RequestsPage extends JFrame implements ActionListener
 {
     // Constants
     static final int WIDTH = 1920;
     static final int LENGTH = 1080;
-
+    
     // Objects
     BankAutomated BA;
     HomePage home;
@@ -25,12 +29,12 @@ public class RequestsPage extends JFrame implements ActionListener
     private final JButton completeButton;
     private final JTextArea detailsField;
 
-    /*
+
+    /**
      * RequestsPage Constructor
-     * @param BA BankAutomated object
-     * @param home HomePage object
-     * @param customer CA object
-     * 
+     * @param BA BankAutomated object, to process the logout if the customer terminates the program on this page
+     * @param home HomePage object, for the customer to return to when they are done making a request
+     * @param customer CA object, the customer that is currently logged in
      */
     public RequestsPage(BankAutomated BA, HomePage home, CA customer)
     {
@@ -64,8 +68,9 @@ public class RequestsPage extends JFrame implements ActionListener
         selectType.addActionListener(this);
         this.add(selectType);
 
-        // GUI Components for request details
-        String instructions = "include a few dates/timings for the admins to pick one, as well as\nyour preferred meeting setting" +" (in-person or virtual)\nPlease clear this box before adding your details.";
+        String instructions = "Enter the details of your request here. If requesting a meeting, make\nsure to " +
+                "include a few dates/timings for the admins to pick one, as well as\nyour preferred meeting setting" +
+                " (in-person or virtual)\nPlease clear this box before adding your details.";
         detailsField = new JTextArea(instructions);
         detailsField.setFont(new Font("SansSerif", Font.PLAIN, 22));
         detailsField.setBackground(Color.white);
@@ -131,10 +136,9 @@ public class RequestsPage extends JFrame implements ActionListener
 
     }
 
-    /*
-     * paint method
+    /**
+     * paint method, overrides the JFrame paint method in order to allow for custom graphical design
      * @param g Graphics object
-     * 
      */
     public void paint(Graphics g)
     {
@@ -157,10 +161,11 @@ public class RequestsPage extends JFrame implements ActionListener
     }
 
 
-    /*
-     * actionPerformed method
-     * @param e ActionEvent object
-     * 
+    /**
+     * actionPerformed method (implementing ActionListener). When the "Back To Home" button is clicked, it sends
+     * the customer back to their homepage. When "Submit Request" is selected, customer report is made into an object
+     * and saved to their arraylist and to the correct counterpart.
+     * @param e ActionEvent object, which listens and keeps track of any button clicks
      */
     @Override
     public void actionPerformed(ActionEvent e)
@@ -177,9 +182,9 @@ public class RequestsPage extends JFrame implements ActionListener
         {
             String requestDescription = detailsField.getText();
 
-            // Check if all fields are filled out
-            if (requestDescription.equals("") || requestDescription.contains("Enter the details of your request here.") || requestDescription.contains("If requesting a meeting")
-            || requestDescription.contains("Please clear this box before adding your details."))
+            if (requestDescription.equals("") || requestDescription.contains("Enter the details of your request here.")
+                || requestDescription.contains("If requesting a meeting")
+                || requestDescription.contains("Please clear this box before adding your details."))
             {
                 JOptionPane.showMessageDialog(this, "Please clear the text box and add details" +
                         " to your request before submitting.");
