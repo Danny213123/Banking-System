@@ -36,13 +36,7 @@ git clone https://github.com/your-username/bank-application.git
 cd bank-application
 ```
 
-3. Build the project using Maven:
-
-```bash
-mvn clean install
-```
-
-4. Run the application:
+3. Run the application:
 ```bash
 java -jar target/bank.jar
 ```
