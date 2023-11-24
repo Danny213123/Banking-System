@@ -26,10 +26,10 @@ This is a simple Java Maven Bank Application that demonstrates the basic functio
 
 ## Getting Started
 
-1. Clone the repository:
+1. Clone the repository into directory:
 
 ```bash
-git clone https://github.com/your-username/bank-application.git
+git clone https://github.com/Danny213123/Online-Bank-Maven
 ```
 
 2. Navigate to the project directory:
