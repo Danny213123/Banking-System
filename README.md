@@ -2,6 +2,8 @@
 Main Project Line: (https://github.com/MoNakouzi/SE_Online_Banking)
 ## Overview
 
+![alt-text](https://github.com/Danny213123/Online-Bank-Maven/blob/main/BCS_Logo.png)
+
 This is a simple Java Maven Bank Application that demonstrates the basic functionality of a banking system. The application is built using Java and managed with Maven, making it easy to build, test, and deploy.
 
 ## Features
